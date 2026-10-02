@@ -16,12 +16,12 @@ set "RC=9009"
 goto done
 
 :run_py
-echo exit|py -3 -m src.shell_emulator2 "%ROOT_DIR%\vfs" "%ROOT_DIR%\scripts\startup_quotes.txt"
+echo exit|py -3 -m src.shell_emulator "%ROOT_DIR%\vfs" "%ROOT_DIR%\scripts\startup_quotes.txt"
 set "RC=%ERRORLEVEL%"
 goto done
 
 :run_python
-echo exit|python -m src.shell_emulator2 "%ROOT_DIR%\vfs" "%ROOT_DIR%\scripts\startup_quotes.txt"
+echo exit|python -m src.shell_emulator "%ROOT_DIR%\vfs" "%ROOT_DIR%\scripts\startup_quotes.txt"
 set "RC=%ERRORLEVEL%"
 goto done
 

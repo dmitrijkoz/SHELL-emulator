@@ -16,7 +16,7 @@ class ShellConfig:
     """Конфигурация запуска эмулятора."""
 
     vfs_path: Path
-    startup_script: Path
+    startup_script: Path | None
 
 
 def get_prompt() -> str:
@@ -54,11 +54,15 @@ def create_cli_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "vfs_path",
-        help="путь к физическому расположению VFS",
+        nargs="?",
+        default="vfs",
+        help="путь к физическому расположению VFS (по умолчанию: vfs)",
     )
     parser.add_argument(
         "startup_script",
-        help="путь к стартовому скрипту",
+        nargs="?",
+        default=None,
+        help="путь к стартовому скрипту (необязательно)",
     )
     return parser
 
@@ -67,7 +71,11 @@ def parse_cli_args(argv: list[str] | None = None) -> ShellConfig:
     """Разобрать параметры командной строки и нормализовать пути."""
     args = create_cli_parser().parse_args(argv)
     vfs_path = Path(args.vfs_path).expanduser().resolve()
-    startup_script = Path(args.startup_script).expanduser().resolve()
+    startup_script = (
+        Path(args.startup_script).expanduser().resolve()
+        if args.startup_script
+        else None
+    )
     return ShellConfig(vfs_path=vfs_path, startup_script=startup_script)
 
 
@@ -79,6 +87,9 @@ def validate_config(config: ShellConfig) -> None:
         raise NotADirectoryError(
             f"Путь к VFS не является каталогом: {config.vfs_path}"
         )
+
+    if config.startup_script is None:
+        return
 
     if not config.startup_script.exists():
         raise FileNotFoundError(
@@ -309,7 +320,10 @@ def main(argv: list[str] | None = None) -> int:
 
     print("Отладочная информация конфигурации:")
     print(f"  Путь к VFS: {config.vfs_path}")
-    print(f"  Путь к стартовому скрипту: {config.startup_script}")
+    if config.startup_script is not None:
+        print(f"  Путь к стартовому скрипту: {config.startup_script}")
+    else:
+        print("  Стартовый скрипт: не задан")
 
     try:
         validate_config(config)
@@ -318,11 +332,12 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     session = ShellSession(config.vfs_path)
-    print("Стартовый скрипт:")
-    if not run_startup_script(session, config.startup_script):
-        return 1
+    if config.startup_script is not None:
+        print("Стартовый скрипт:")
+        if not run_startup_script(session, config.startup_script):
+            return 1
+        print("Стартовый скрипт выполнен успешно.")
 
-    print("Стартовый скрипт выполнен успешно.")
     run_repl(session)
     return 0
 

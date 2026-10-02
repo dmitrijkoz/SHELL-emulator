@@ -16,12 +16,12 @@ set "RC=9009"
 goto done
 
 :run_py
-py -3 -m src.shell_emulator2 "%ROOT_DIR%\vfs" "%ROOT_DIR%\scripts\startup_error.txt"
+py -3 -m src.shell_emulator "%ROOT_DIR%\vfs" "%ROOT_DIR%\scripts\startup_error.txt"
 set "RC=%ERRORLEVEL%"
 goto check
 
 :run_python
-python -m src.shell_emulator2 "%ROOT_DIR%\vfs" "%ROOT_DIR%\scripts\startup_error.txt"
+python -m src.shell_emulator "%ROOT_DIR%\vfs" "%ROOT_DIR%\scripts\startup_error.txt"
 set "RC=%ERRORLEVEL%"
 goto check
 

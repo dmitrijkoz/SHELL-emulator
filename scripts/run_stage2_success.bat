@@ -9,7 +9,7 @@ echo VFS: %CD%\vfs
 echo Startup: %CD%\scripts\startup_success.txt
 echo.
 
-py -3 -m src.shell_emulator2 "%CD%\vfs" "%CD%\scripts\startup_success.txt"
+py -3 -m src.shell_emulator "%CD%\vfs" "%CD%\scripts\startup_success.txt"
 
 echo.
 echo Exit code: %ERRORLEVEL%
