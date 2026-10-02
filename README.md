@@ -26,7 +26,7 @@ python -m src.shell_emulator <vfs_path> <startup_script>
 Пример:
 
 ```bash
-python -m src.shell_emulator ./vfs ./scripts/startup_success.txt
+py -m src.shell_emulator ./vfs ./scripts/startup_success.txt
 ```
 
 При запуске выводится отладочная информация:
@@ -81,7 +81,7 @@ scripts\run_stage2_quotes.bat
 ### Вручную
 
 ```bash
-python -m unittest discover -s tests -v
+py -m unittest discover -s tests -v
 ```
 
 ## 6. Коды завершения
